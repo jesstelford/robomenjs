@@ -1,4 +1,4 @@
-default: build
+default: dev
 
 SRCDIR = src
 LIBDIR = lib
@@ -9,6 +9,7 @@ MAINMODULE = App
 SRC = $(shell find "$(SRCDIR)" -name "*.coffee" -type f | sort)
 LIB = $(SRC:$(SRCDIR)/%.coffee=$(LIBDIR)/%.js)
 TEST = $(shell find "$(TESTDIR)" -name "*.coffee" -type f | sort)
+CJSIFYEXTRAPARAMS =
 
 COFFEE=node_modules/.bin/coffee --js
 MOCHA=node_modules/.bin/mocha --compilers coffee:coffee-script-redux/register -r coffee-script-redux/register -r test-setup.coffee -u tdd -R dot
@@ -17,6 +18,7 @@ CJSIFY=node_modules/.bin/cjsify --minify -r $(LIBDIR)
 all: build test
 build: $(LIB)
 bundle: $(DISTDIR)/bundle.js
+dev: dev-dep bundle
 
 $(LIBDIR)/%.js: $(SRCDIR)/%.coffee
 	@mkdir -p "$(@D)"
@@ -24,9 +26,12 @@ $(LIBDIR)/%.js: $(SRCDIR)/%.coffee
 
 $(DISTDIR)/bundle.js: $(LIB)
 	@mkdir -p "$(@D)"
-	$(CJSIFY) -x $(MAINMODULE) $(shell node -pe 'require("./package.json").main') >"$@"
+	$(CJSIFY) -x $(MAINMODULE) $(CJSIFYEXTRAPARAMS) $(shell node -pe 'require("./package.json").main') >"$@"
 
-.PHONY: phony-dep release test loc clean
+dev-dep:
+	$(eval CJSIFYEXTRAPARAMS := --inline-source-map)
+
+.PHONY: phony-dep release test loc clean dev-dep
 phony-dep:
 
 VERSION = $(shell node -pe 'require("./package.json").version')
