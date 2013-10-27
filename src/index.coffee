@@ -1,6 +1,7 @@
 Sprite = require('img/sprite')
+Avatar = require('avatar')
 Q = require('q')
-$ = jQuery
+$ = global.jQuery
 
 # Globals
 SPLASH_TIMEOUT = 100
@@ -29,17 +30,61 @@ exports.splash = ->
 
   deferred = Q.defer()
 
-  splash = new Sprite('media/RoboMenSplash.png')
+  splash = new Sprite "img/splash.png"
   splash.render()
 
   next = ->
     clearTimeout timeoutId
-    $(document).off 'keyup.splash mouseup.splash'
+    $(document).off "keyup.splash mouseup.splash"
     deferred.resolve()
     console.log "Next"
 
   timeoutId = setTimeout next, SPLASH_TIMEOUT
 
-  $(document).on 'keyup.splash mouseup.splash', next
+  $(document).on "keyup.splash mouseup.splash", next
 
   return deferred.promise
+
+exports.init = ->
+  setupSprites()
+
+exports.menu = ->
+
+exports.game = ->
+
+setupSprites = ->
+
+  target = new Sprite "img/target.png", 19, 1
+  target.setPosition -100, -100
+  target.setZIndex 41
+  target.setRenderSize 30, 30
+
+  otherSprites = []
+
+  for i in [2..8]
+    otherSprites[i] = new Sprite "img/#{i}.png", 2, 1
+    otherSprites[i].setPosition -100, -100
+    otherSprites[i].setZIndex(i + 40)
+    otherSprites[i].setRenderSize 30, 30
+
+  billy = new Sprite "img/billy.png", 8, 8
+  billy.setPosition -100, -100
+  billy.setZIndex 50
+  billy.setRenderOffset 20, 30
+  billy.setRenderSize 40, 40
+
+  red = new Sprite "img/red.png", 8, 8
+  red.setPosition -100, -100
+  red.setZIndex 50
+  red.setRenderOffset 20, 30
+  red.setRenderSize 40, 40
+
+  grass = new Sprite "img/grass.png", 5, 1
+  grass.setPosition -100, -100
+  grass.setZIndex 1
+  grass.setRenderSize 30, 30
+
+  for i in [21..40]
+    otherSprites[i] = new Sprite "img/#{i}.png"
+    otherSprites[i].setPosition -100, -100
+    otherSprites[i].setZIndex(i - 19)
