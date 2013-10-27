@@ -1,23 +1,28 @@
 {
-  "name": "project-name",
+  "name": "robomen",
   "version": "0.0.0-dev",
-  "description": "Project Description",
-  "homepage": "https://github.com/github-user/project-name",
+  "description": "You are in charge of two robots who must escape the levels on offer. Each robot will walk and walk until they hit an obstacle (wall, fence, rock, etc) upon which they turn. The red robot turns left every time, the blue robot turns right. You drop markers onto the area to guide them (arrows to force them to turn, etc) and need to get them home!",
+  "homepage": "https://github.com/jesstelford/robomen",
   "keywords": [],
   "author": {
-    "name": "Your Name",
-    "email": "Your Email",
-    "url": "Your URI"
+    "name": "Jess Telford",
+    "email": "jess+robomen@jes.st",
+    "url": "http://jes.st"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/github-user/project-name"
+    "url": "git://github.com/jesstelford/robomen"
   },
-  "bugs": "https://github.com/github-user/project-name/issues",
+  "bugs": "https://github.com/jesstelford/robomen/issues",
   "engines": {
     "node": "0.8.x || 0.9.x || 0.10.x"
   },
   "main": "index.js",
+  "directories": {
+    "bin": "bin",
+    "lib": "lib",
+    "test": "test"
+  },
   "dependencies": {},
   "devDependencies": {
     "coffee-script-redux": "2.0.0-beta7",
@@ -32,7 +37,7 @@
   "licenses": [
     {
       "type": "FreeBSD",
-      "url": "https://github.com/github-user/project-name/blob/master/LICENSE"
+      "url": "https://github.com/jesstelford/robomen/blob/master/LICENSE"
     }
   ]
 }
