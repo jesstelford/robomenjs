@@ -26,7 +26,7 @@ $(LIBDIR)/%.js: $(SRCDIR)/%.coffee
 
 $(DISTDIR)/bundle.js: $(LIB)
 	@mkdir -p "$(@D)"
-	$(CJSIFY) -x $(MAINMODULE) $(CJSIFYEXTRAPARAMS) -a "q.js":"../node_modules/q/q.js" $(shell node -pe 'require("./package.json").main') >"$@"
+	$(CJSIFY) -x $(MAINMODULE) $(CJSIFYEXTRAPARAMS) -a "animationFrame.js":"../node_modules/animationFrame/AnimationFrame.js" -a "q.js":"../node_modules/q/q.js" $(shell node -pe 'require("./package.json").main') >"$@"
 
 dev-dep:
 	$(eval CJSIFYEXTRAPARAMS := --inline-source-map)
