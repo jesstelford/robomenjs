@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "q": "~0.9.7",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "animationFrame": "git://github.com/kof/animationFrame#master"
   },
   "devDependencies": {
     "coffee-script-redux": "2.0.0-beta7",

@@ -3,6 +3,7 @@ Avatar = require('avatar')
 Music = require('audio/music')
 Sound = require('audio/sound')
 levelLoader = require('level/loader')
+looper = require('looper')
 Q = require('q')
 $ = global.jQuery
 
