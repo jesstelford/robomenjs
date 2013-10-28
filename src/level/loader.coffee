@@ -22,6 +22,7 @@ exports.load = (newLevel) ->
     if newLevel isnt currentlevel
       use[i] = tmp
 
+  # TODO: Double check these aren't over by 1!
   for y in [1..10]
     for x in [1..15]
       tex[x][y] = file.read fileHandle, 2
