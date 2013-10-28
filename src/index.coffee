@@ -38,6 +38,8 @@ for i [1..15]
   map[i] = []
   tex[i] = []
 
+spriteIdToSprite = []
+
 exports.splash = ->
 
   deferred = Q.defer()
@@ -86,12 +88,17 @@ exports.menu = ->
 exports.game = ->
   levelLoader.load 1
 
+  looper.loop 60, (time, msPassed, framesPassed) ->
+
+
 setupSprites = ->
 
-  target = new Sprite "img/target.png", 19, 1
-  target.setPosition -100, -100
-  target.setZIndex 41
-  target.setRenderSize 30, 30
+  targetSprite = new Sprite "img/targetSprite.png", 19, 1
+  targetSprite.setPosition -100, -100
+  targetSprite.setZIndex 41
+  targetSprite.setRenderSize 30, 30
+
+  spriteIdToSprite[1] = targetSprite
 
   otherSprites = []
 
@@ -100,28 +107,57 @@ setupSprites = ->
     otherSprites[i].setPosition -100, -100
     otherSprites[i].setZIndex(i + 40)
     otherSprites[i].setRenderSize 30, 30
+    spriteIdToSprite[i] = otherSprites[i]
 
-  billy = new Sprite "img/billy.png", 8, 8
-  billy.setPosition -100, -100
-  billy.setZIndex 50
-  billy.setRenderOffset 20, 30
-  billy.setRenderSize 40, 40
+  billySprite = new Sprite "img/billy.png", 8, 8
+  billySprite.setPosition -100, -100
+  billySprite.setZIndex 50
+  billySprite.setRenderOffset 20, 30
+  billySprite.setRenderSize 40, 40
+  spriteIdToSprite[10] = billySprite
 
-  red = new Sprite "img/red.png", 8, 8
-  red.setPosition -100, -100
-  red.setZIndex 50
-  red.setRenderOffset 20, 30
-  red.setRenderSize 40, 40
+  redSprite = new Sprite "img/red.png", 8, 8
+  redSprite.setPosition -100, -100
+  redSprite.setZIndex 50
+  redSprite.setRenderOffset 20, 30
+  redSprite.setRenderSize 40, 40
+  spriteIdToSprite[11] = redSprite
 
-  grass = new Sprite "img/grass.png", 5, 1
-  grass.setPosition -100, -100
-  grass.setZIndex 1
-  grass.setRenderSize 30, 30
+  grassSprite = new Sprite "img/grass.png", 5, 1
+  grassSprite.setPosition -100, -100
+  grassSprite.setZIndex 1
+  grassSprite.setRenderSize 30, 30
+  spriteIdToSprite[20] = grassSprite
 
   for i in [21..40]
     otherSprites[i] = new Sprite "img/#{i}.png"
     otherSprites[i].setPosition -100, -100
     otherSprites[i].setZIndex(i - 19)
+    spriteIdToSprite[i] = otherSprites[i]
+
+  goButtonSprite = new Sprite "img/go.png", 2, 1
+  goButtonSprite.setRenderSize(loc[LOC_GO].x2 - loc[LOC_GO].x1, loc[LOC_GO].y2 - loc[LOC_GO].y1)
+  goButtonSprite.setPosition -1000, -1000
+  goButtonSprite.setZIndex 102
+  spriteIdToSprite[106] = goButtonSprite
+
+  resetSprite = new Sprite "img/reset.png",2,1
+  resetSprite.setRenderSize(loc(LOC_RESET).x2 - loc(LOC_RESET).x1,loc(LOC_RESET).y2 - loc(LOC_RESET).y1)
+  resetSprite.setPosition -1000,-1000
+  resetSprite.setZIndex 102
+  spriteIdToSprite[107] = resetSprite
+
+  yellowHeadSprite = new Sprite "img/yellow-head.png",2,1
+  yellowHeadSprite.setRenderSize 40,52
+  yellowHeadSprite.setPosition -1000,-1000
+  yellowHeadSprite.setZIndex 2
+  spriteIdToSprite[109] = yelloHeadSprite
+
+  redHeadSprite = new Sprite "img/red-head.png",2,1
+  redHeadSprite.setRenderSize 40,52
+  redHeadSprite.setPosition -1000,-1000
+  redHeadSprite.setZIndex 2
+  spriteIdToSprite[110] = redHeadSprite
 
 setupSounds = ->
 

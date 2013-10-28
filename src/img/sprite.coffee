@@ -3,6 +3,7 @@ module.exports = class Sprite
   xPos: 0
   yPos: 0
   zIndex: 0
+  frame: 0
 
   constructor: (@file, @across = 1, @down = 1) ->
     # TODO: Implement me
@@ -21,3 +22,9 @@ module.exports = class Sprite
   setRenderSize: (@renderWidth, @renderHeight) ->
 
   setRenderOffset: (@renderXOffset, @renderYOffset) ->
+
+  setFrame: (@frame) ->
+
+  paste: (x, y) ->
+    # TODO: 'paste' this sprite to the screen so it is immune to future property
+    # changes (but overwritten next game loop)

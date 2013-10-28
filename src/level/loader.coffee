@@ -17,12 +17,12 @@ exports.load = (newLevel) ->
 
   # Read the following 2-byte sequence:
   # Lives, CW, CCW, Reverse, up, down, right, left
+  # TODO: Is this an off by 1 error?
   for i in [0..7]
     tmp = file.read fileHandle, 2
     if newLevel isnt currentlevel
       use[i] = tmp
 
-  # TODO: Double check these aren't over by 1!
   for y in [1..10]
     for x in [1..15]
       tex[x][y] = file.read fileHandle, 2
