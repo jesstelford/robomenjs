@@ -23,7 +23,7 @@ go = false
 musicon = true
 score = 0
 totallevels = 24
-# ticktock = Timer() #???
+ticktock = (new Date()).getTime()
 trys = 0
 
 fps = 0
