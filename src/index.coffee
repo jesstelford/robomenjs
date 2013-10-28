@@ -63,6 +63,25 @@ exports.init = ->
   setupMusic()
 
 exports.menu = ->
+  $('#quit').on 'click.quit', ->
+    # TODO: Quit
+    $('#quit').off 'click.quit'
+
+  $('#play').on 'click.play', ->
+    # TODO: play
+    $('#play').off 'click.play'
+
+  $('#instructions').on 'click.instructions', ->
+    # TODO: instructions
+    $('#instructions').off 'click.instructions'
+
+  $('#code').on 'click.code', ->
+    # TODO: code
+    $('#code').off 'click.code'
+
+  $('#resume').on 'click.resume', ->
+    # TODO: resume
+    $('#resume').off 'click.resume'
 
 exports.game = ->
   levelLoader.load 1
