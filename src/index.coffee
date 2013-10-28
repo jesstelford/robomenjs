@@ -1,5 +1,7 @@
 Sprite = require('img/sprite')
 Avatar = require('avatar')
+Music = require('audio/music')
+Sound = require('audio/sound')
 Q = require('q')
 $ = global.jQuery
 
@@ -47,6 +49,8 @@ exports.splash = ->
 
 exports.init = ->
   setupSprites()
+  setupSounds()
+  setupMusic()
 
 exports.menu = ->
 
@@ -88,3 +92,21 @@ setupSprites = ->
     otherSprites[i] = new Sprite "img/#{i}.png"
     otherSprites[i].setPosition -100, -100
     otherSprites[i].setZIndex(i - 19)
+
+setupSounds = ->
+
+  droid3 = new Sound "audio/Droid 3.wav"
+  hitWater = new Sound "audio/Hit water.wav"
+  button2 = new Sound "audio/Button 2.wav"
+  hitWall = new Sound "audio/Hit wall.wav"
+  carpetFast = new Sound "audio/Carpet fast.wav"
+  bug1 = new Sound "audio/Bug 1.wav"
+  rippler = new Sound "audio/Rippler.wav"
+
+  carpetFast.setVolume 50
+
+setupMusic = ->
+
+  fun = new Music "audio/music fun.mp3"
+  fun.setVolume 50
+  fun.play()
