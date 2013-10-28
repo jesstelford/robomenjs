@@ -2,6 +2,7 @@ Sprite = require('img/sprite')
 Avatar = require('avatar')
 Music = require('audio/music')
 Sound = require('audio/sound')
+levelLoader = require('level/loader')
 Q = require('q')
 $ = global.jQuery
 
@@ -27,6 +28,14 @@ trys = 0
 fps = 0
 
 tmp = 0
+
+av = []
+use = [0,0,0,0,0,0,0,0]
+map = []
+text = []
+for i [1..15]
+  map[i] = []
+  tex[i] = []
 
 exports.splash = ->
 
@@ -55,6 +64,7 @@ exports.init = ->
 exports.menu = ->
 
 exports.game = ->
+  levelLoader.load 1
 
 setupSprites = ->
 
