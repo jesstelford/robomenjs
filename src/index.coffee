@@ -1,3 +1,5 @@
+# See this Fiddle: http://jsfiddle.net/Dbch7/
+# It is an example of adding/removing 'items' on click to the map
 Sprite = require('img/sprite')
 Avatar = require('avatar')
 Music = require('audio/music')
@@ -6,6 +8,17 @@ levelLoader = require('level/loader')
 looper = require('looper')
 Q = require('q')
 $ = global.jQuery
+
+# Constants
+LOC_GAME_AREA = 0
+LOC_INTERFACE = 1
+LOC_ITEMS = 2
+LOC_MENU = 3
+LOC_GO = 4
+LOC_RESET = 5
+LOC_MENU_ITEM1 = 6
+LOC_MENU_ITEM2 = 7
+LOC_MENU_ITEM3 = 8
 
 # Globals
 SPLASH_TIMEOUT = 100
@@ -39,6 +52,14 @@ for i [1..15]
   tex[i] = []
 
 spriteIdToSprite = []
+
+# GIMME DA CODEZ!
+codes = [
+  "onceuponatime","therewasaknight","indullarmour","whorodeintotown","onapony"
+  "peoplelaughed","athimbutheknew","thatoneday","hewouldgethis","ownbackand","everyonewould","lovehimagain"
+  "theonlyproblem","wasthatthe","knightisblind","asabat"
+  "andhehadjust","onelegleft","afterheaccidentally","tresspassedina","dogkennel","whichimsure","isamistakehe","wontmaketwice"
+]
 
 exports.splash = ->
 

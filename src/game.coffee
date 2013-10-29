@@ -139,21 +139,21 @@ update_avatars = (scale) ->
 
 _game_over = (str) ->
 
-   buttonText = "Main Menu"
+  buttonText = "Main Menu"
 
-   console.log "Game Over!", str
-   console.log "Score", score
+  console.log "Game Over!", str
+  console.log "Score", score
 
-   # TODO Define the 'main-menu' area (clicking anywhere goes back to the main menu)
-   $('#main-menu').on 'click.main-menu', ->
-     $('#main-menu').off 'click.main-menu'
-     # TODO: Go back to the main menu
+  # TODO Define the 'main-menu' area (clicking anywhere goes back to the main menu)
+  $('#main-menu').on 'click.main-menu', ->
+    $('#main-menu').off 'click.main-menu'
+    # TODO: Go back to the main menu
 
-   # TODO: Define the 'game' area
-   $('#game').on 'click.game', ->
-     $('#game').off 'click.game'
-     loader.load 1
-     # TODO: Somehow get back to the game
+  # TODO: Define the 'game' area
+  $('#game').on 'click.game', ->
+    $('#game').off 'click.game'
+    loader.load 1
+    # TODO: Somehow get back to the game
    
 _display = ->
 
@@ -214,6 +214,48 @@ _inzone = (x1,y1,x2,y2,x,y) ->
   if x >= x1 and x <= x2 and y >= y1 and y <= y2 then return 1
   return 0
 
+_score = (attempts, time) ->
+  #time in seconds
+
+  cont = false
+  pressed = false
+  active = false
+  button = ""
+  code = ""
+
+  code = codes[currentlevel]
+
+  attemptBonus = Math.floor(1000 / attempts)
+  timeBonus = Math.floor(10000 / time)
+
+  score += attemptBonus
+  score += timeBonus
+
+  button = "Next Level"
+
+  $(document).on '#game', 'click.score' =>
+    cont = 1
+    pressed = 0
+
+  $(document).on '#game', 'mouseover.score' =>
+    active = 1
+
+  $(document).on '#game', 'mouseout.score' =>
+    active = 0
+
+  console.log "Copmleted!"
+  console.log "Code:", code
+
+  console.log "Time Taken:", time, "seconds"
+  console.log "Attempts Made:", attempts
+  console.log "Time Bonus:", timeBonus
+  console.log "Attempt Bonus:", attemptBonus
+  console.log "Level Score:", timeBonus, "+", attemptBonus, "=", timeBonus + attemptBonus
+  console.log "Score:", score
+  console.log "Level:", currentlevel
+
+  # TODO: Delay execution somehow and return -1 once done
+
 exports.game = (time, msPassed, framesPassed) ->
 
   if go = 1 then update_avatars(framesPassed)
@@ -261,226 +303,76 @@ exports.game = (time, msPassed, framesPassed) ->
       map[tileX][tileY] = 20 # Reset that map peice to grass
       if musicon then button2.play()
 
-  #Left-Mouse-Click stuffskies
-  If MouseClick() = 1 : If lmb = 0 : lmb = 1
-  #** On KeyDown **
+  $(document).on "#menu_#{MENU_RESUME}", "mousedown.menu_#{MENU_RESUME}", ->
+    # Go to the menu (and stop the game loop somehow)
 
-  #** End On Down **
-  Else
-  #** While KeyHeld **
+  $(document).on "#menu_#{MENU_INSTRUCTIONS}", "mousedown.menu_#{MENU_INSTRUCTIONS}", ->
+    # Go to the instructions (and stop the game loop somehow)
 
-     #Some image swapping for the Buttons on the Interface
-     If _dist(MouseX(),MouseY(),590,53) <= 10
-        Set Sprite Image 102,104
-     Else
-        Set Sprite Image 102,102
-        If _dist(MouseX(),MouseY(),566,37) <= 10
-           Set Sprite Image 101,105
-        Else
-           Set Sprite Image 101,103
-        EndIf
-     EndIf
+  $(document).on "#menu_#{MENU_AUDIO}", "mousedown.menu_#{MENU_AUDIO}", ->
+    # Go to the instructions (and stop the game loop somehow)
+    if musicon
+      musicon = 0
+      fun.stop()
+      carpetFast.stop()
+    else
+      musicon = 1
+      fun.play()
 
-     If _inzone(loc[LOC_GO].x1,loc[LOC_GO].y1,loc[LOC_GO].x2,loc[LOC_GO].y2,MouseX(),MouseY())
-        Set Sprite Frame 106,2
-     Else
-        Set Sprite Frame 106,1
-     EndIf
+  $(document).on "mouseup.gameloop", ->
+    spriteIdToSprite[106].setFrame 1
+    spriteIdToSprite[107].setFrame 1
 
-     If _inzone(loc[LOC_RESET].x1,loc[LOC_RESET].y1,loc[LOC_RESET].x2,loc[LOC_RESET].y2,MouseX(),MouseY())
-        Set Sprite Frame 107,2
-     Else
-        Set Sprite Frame 107,1
-     EndIf
+    # TODO get Mouse position
+    mouseX = 0
+    mouseY = 0
 
-     If mouseselect <> 0 Then Paste Sprite mouseselect,MouseX() - Sprite Width(mouseselect)/2,MouseY() - Sprite Height(mouseselect)/2
+    #What to do when an item is dropped
+    if mouseselect isnt 0
+      if _inzone(loc[LOC_GAME_AREA].x1, loc[LOC_GAME_AREA].y1, loc[LOC_GAME_AREA].x2, loc[LOC_GAME_AREA].y2, mouseX, mouseY)
+        tmpx = Math.floor((mouseX - mapoffx)/30) + 1
+        tmpy = Math.floor((mouseY - mapoffy)/30) + 1
+        if ( map[tmpx][tmpy] <= 20 ) and ( map[tmpx][tmpy] isnt 1 )
+          map[tmpx][tmpy] = mouseselect
+          use[mouseselect - 1]--
+          if musicon then hitWal.play()
+      mouseselect = 0
 
+  # TODO: 
+  # Paste the sprite at the position of the mouse while mouseselect isnt 0
+  # If mouseselect <> 0 Then Paste Sprite mouseselect,MouseX() - Sprite Width(mouseselect)/2,MouseY() - Sprite Height(mouseselect)/2
 
-     If _inzone(loc[LOC_MENU].x1,loc[LOC_MENU].y1,loc[LOC_MENU].x2,loc[LOC_MENU].y2,MouseX(),MouseY())
-        For i = 6 To 8
-           If _inzone(loc(i).x1,loc(i).y1,loc(i).x2,loc(i).y2,MouseX(),MouseY())
-              menus(MENU_ROW_0,i - 6).pressed = 1
-           Else
-              menus(MENU_ROW_0,i - 6).pressed = 0
-           EndIf
-        Next i
-     Else
-        For i = 0 To 2
-           menus(MENU_ROW_0,i).pressed = 0
-        Next i
-     EndIf
+  if endanim is 1
+    spriteIdToSprite[1].play 1, 19, 20 # target sprite
+    if spriteIdToSprite[1].getFrame is 19 then endanim = 0
 
-
-  #** End Held **
-  EndIf : Else : If lmb = 1 : lmb = 0
-  #** On KeyUp **
-
-     If _dist(MouseX(),MouseY(),590,53) <= 10
-        Set Sprite Image 102,102
-        End
-     EndIf
-
-     If _dist(MouseX(),MouseY(),566,37) <= 10
-        Set Sprite Image 101,103
-        Minimize Window
-     EndIf
-
-     Set Sprite Frame 106,1
-     Set Sprite Frame 107,1
-
-     #What to do when an item is dropped
-     If mouseselect <> 0
-        If _inzone(loc[LOC_GAME_AREA].x1,loc[LOC_GAME_AREA].y1,loc[LOC_GAME_AREA].x2,loc[LOC_GAME_AREA].y2,MouseX(),MouseY())
-           tmpx = Int((MouseX() - mapoffx)/30) + 1
-           tmpy = Int((MouseY() - mapoffy)/30) + 1
-           If ( map(tmpx,tmpy) <= 20 ) AND ( map(tmpx,tmpy) <> 1 )
-              map(tmpx,tmpy) = mouseselect
-              use(mouseselect - 1) = use(mouseselect - 1) - 1
-              If musicon Then Play Sound SOUND_HIT_WALL
-           EndIf
-        EndIf
-        mouseselect = 0
-     EndIf
-
-     If menus(MENU_ROW_0, MENU_MENU).pressed = 1
-        #Menu
-        menus(MENU_ROW_0, MENU_MENU).pressed = 0
-        menus(MENU_ROW_1,MENU_RESUME).text = menus(MENU_ROW_1,MENU_RESUME).text2
-        If _main_menu() = -1
-           _load_level(1)
-           GoTo start
-        EndIf
-     EndIf
-
-     If menus(MENU_ROW_0,MENU_INSTRUCTIONS).pressed = 1
-        #Instructions
-        menus(MENU_ROW_0,MENU_INSTRUCTIONS).pressed = 0
-        menus(MENU_ROW_1,MENU_RESUME).text = menus(MENU_ROW_1,MENU_RESUME).text2
-        If _instructions(1) = -1
-           _load_level(1)
-           GoTo start
-        EndIf
-     EndIf
-
-     If menus(MENU_ROW_0,MENU_AUDIO).pressed = 1
-        #Audio On/Off
-        If menus(MENU_ROW_0,MENU_AUDIO).text = menus(MENU_ROW_0,MENU_AUDIO).text1 Then menus(MENU_ROW_0,MENU_AUDIO).text = menus(MENU_ROW_0,MENU_AUDIO).text2 Else menus(MENU_ROW_0,MENU_AUDIO).text = menus(MENU_ROW_0,MENU_AUDIO).text1
-        menus(MENU_ROW_0,MENU_AUDIO).pressed = 0
-        If musicon
-           musicon = 0
-           Stop Music MUSIC_FUN
-           Stop Sound SOUND_CARPET_FAST
-        Else
-           musicon = 1
-           Loop Music MUSIC_FUN
-        EndIf
-     EndIf
-
-  #** End On Up **
-  EndIf : EndIf
-
-  If endanim = 1
-     Play Sprite 1,1,19,20
-     If Sprite Frame(1) = 19 Then endanim = 0
-  EndIf
-
-  If totalavs = 0 And endanim = 0
+  if totalavs is 0 and endanim is 0
      go = 0
-     Stop Sound SOUND_CARPET_FAST
-     _score(trys, Int((Timer() - ticktock)/1000))
-     If _load_level(currentlevel + 1) = -1
-        #Final Win Condition!
+     carpetFast.stop()
+
+     _score(trys, Math.floor(((new Date()).getTime() - ticktock)/1000))
+     if not loader.exists(currentlevel + 1)
+        # Final Win Condition!
         _game_over("You Completed All The Available Levels!")
-        If _main_menu() = -1
-           _load_level(1)
-           GoTo start
-        EndIf
-     EndIf
-  EndIf
-
-  If _inzone(loc[LOC_MENU].x1,loc[LOC_MENU].y1,loc[LOC_MENU].x2,loc[LOC_MENU].y2,MouseX(),MouseY())
-     For i = 6 To 8
-        If menus(MENU_ROW_0,i - 6).pressed = 0
-           If _inzone(loc(i).x1,loc(i).y1,loc(i).x2,loc(i).y2,MouseX(),MouseY())
-              menus(MENU_ROW_0,i - 6).active = 1
-           Else
-              menus(MENU_ROW_0,i - 6).active = 0
-           EndIf
-        EndIf
-     Next i
-  Else
-     For i = 0 To 2
-        menus(MENU_ROW_0,i).active = 0
-     Next i
-  EndIf
-
+        # TODO: Go to the main menu
 
   #In-game Menu items...
-  StartText
+  console.log "Lives:", use[0]
+  console.log "Level:", currentlevel
 
-  Draw Color 0,150,50,100
-  For i = 0 To 2
-     Text AA 1,482,350 + (i*30),1,menus(MENU_ROW_0,i).text
-  Next i
-  Text AA 1,221,351,0,"Lives: " + Str$(use(0))  :#Lives meter
-  Text AA 1,351,351,0,"Level: " + Str$(currentlevel)  :#Level
 
-  Draw Color 0,100,0,25
-  For i = 0 To 2
-     If menus(MENU_ROW_0,i).pressed = 1
-        Text AA 1,481,349 + (i*30),1,menus(MENU_ROW_0,i).text
-     Else
-        If menus(MENU_ROW_0,i).active
-           Text AA 1,484,352 + (i*30),1,menus(MENU_ROW_0,i).text
-        Else
-           Text AA 1,483,351 + (i*30),1,menus(MENU_ROW_0,i).text
-        EndIf
-     EndIf
-  Next i
-  Text AA 1,222,352,0,"Lives: " + Str$(use(0))  :#Lives meter
-  Text AA 1,352,352,0,"Level: " + Str$(currentlevel)  :#Level
+  for i in [1..7]
+    if use[i] is 0
+      console.log "Item #{i} is out!"
+    else
+      console.log "Item #{i} remaining:", use[i]
 
-  Draw Color 100,200,100,35
-  For i = 0 To 2
-     If menus(MENU_ROW_0,i).pressed = 1
-        Text AA 1,483,351 + (i*30),1,menus(MENU_ROW_0,i).text
-     Else
-        If menus(MENU_ROW_0,i).active
-           Text AA 1,480,348 + (i*30),1,menus(MENU_ROW_0,i).text
-        Else
-           Text AA 1,481,349 + (i*30),1,menus(MENU_ROW_0,i).text
-        EndIf
-     EndIf
-  Next i
-  Text AA 1,220,350,0,"Lives: " + Str$(use(0))  :#Lives meter
-  Text AA 1,350,350,0,"Level: " + Str$(currentlevel)  :#Level
+  if av1num = 0
+    console.log "Avatar 1 is out!"
+  else
+    console.log "Avatar 1 remaining:", av1num
 
-  Text AA 1,500,440,1,"FPS = " + Str$(fps)
-
-  For i = 1 To 7
-     If use(i) = 0
-        Draw Color 0,150,50,25
-        Text AA 2,200 + (i * 30),410,1,Str$(use(i))
-        Draw Color 0,150,50,100
-     Else
-        Text AA 2,200 + (i * 30),410,1,Str$(use(i))
-     EndIf
-  Next i
-
-  If av1num = 0
-     Draw Color 0,150,50,25
-     Text AA 2,136,410,1,"0"
-     Draw Color 0,150,50,100
-  Else
-     Text AA 2,136,410,1,Str$(av1num)
-  EndIf
-
-  If av2num = 0
-     Draw Color 0,150,50,25
-     Text AA 2,182,410,1,"0"
-     Draw Color 0,150,50,100
-  Else
-     Text AA 2,182,410,1,Str$(av2num)
-  EndIf
-
-  EndText
+  if av2num = 0
+    console.log "Avatar 2 is out!"
+  else
+    console.log "Avatar 2 remaining:", av2num

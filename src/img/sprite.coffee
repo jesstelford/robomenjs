@@ -25,6 +25,17 @@ module.exports = class Sprite
 
   setFrame: (@frame) ->
 
+  getFrame: -> return @frame
+
   paste: (x, y) ->
     # TODO: 'paste' this sprite to the screen so it is immune to future property
     # changes (but overwritten next game loop)
+
+  play: (startFrame, endFrame, framesPerSecond) ->
+    # TODO: Implement me
+    # Use RequestAnimationFrame?
+    # NOTE: DBPro seems to require this to be called every frame. I don't want
+    # to do that, but I'm going to keep the code calling it every frame for now
+  
+  stop: ->
+    # TODO: Stop animating (using cancelanimationframe?)
